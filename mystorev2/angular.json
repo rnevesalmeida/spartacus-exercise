@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "mystore": {
+    "mystorev2": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -24,46 +24,29 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/mystore",
+            "outputPath": "dist/mystorev2",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "**/*",
-                "input": "./node_modules/@spartacus/smartedit/assets",
-                "output": "assets/"
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "src/styles/spartacus/user.scss",
-              "src/styles/spartacus/cart.scss",
-              "src/styles/spartacus/order.scss",
-              "src/styles/spartacus/checkout.scss",
-              "src/styles/spartacus/storefinder.scss",
-              "src/styles/spartacus/asm.scss",
-              "src/styles/spartacus/product.scss"
+              "src/styles.scss"
             ],
             "scripts": [],
-            "stylePreprocessorOptions": {
-              "includePaths": ["node_modules/"],
-              "sass": {
-                "silenceDeprecations": ["import"]
-              }
+            "server": "src/main.server.ts",
+            "outputMode": "server",
+            "ssr": {
+              "entry": "src/server.ts"
             }
-            // ,
-            // "server": "src/main.server.ts",
-            // "outputMode": "server",
-            // "ssr": {
-            //   "entry": "src/server.ts"
-            // }
           },
           "configurations": {
             "production": {
@@ -71,7 +54,7 @@
                 {
                   "type": "initial",
                   "maximumWarning": "500kB",
-                  "maximumError": "3.5mb"
+                  "maximumError": "1MB"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -93,10 +76,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "mystore:build:production"
+              "buildTarget": "mystorev2:build:production"
             },
             "development": {
-              "buildTarget": "mystore:build:development"
+              "buildTarget": "mystorev2:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -107,40 +90,25 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "**/*",
-                "input": "./node_modules/@spartacus/smartedit/assets",
-                "output": "assets/"
               }
             ],
             "styles": [
-              "src/styles.scss",
-              "src/styles/spartacus/user.scss",
-              "src/styles/spartacus/cart.scss",
-              "src/styles/spartacus/order.scss",
-              "src/styles/spartacus/checkout.scss",
-              "src/styles/spartacus/storefinder.scss",
-              "src/styles/spartacus/asm.scss",
-              "src/styles/spartacus/product.scss"
+              "src/styles.scss"
             ],
-            "scripts": [],
-            "stylePreprocessorOptions": {
-              "includePaths": ["node_modules/"]
-            }
+            "scripts": []
           }
         }
       }
     }
-  },
-  "cli": {
-    "analytics": "7ccec562-689c-4978-9e5e-b9bceeaa2d2f"
   }
 }
