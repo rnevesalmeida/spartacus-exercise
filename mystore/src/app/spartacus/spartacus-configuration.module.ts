@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { translationChunksConfig, translationsEn } from '@spartacus/assets';
 import {
-  FeaturesConfig,
+  ContextServiceMap,
   I18nConfig,
   OccConfig,
+  PRODUCT_NORMALIZER,
   provideConfig,
+  serviceMapFactory,
   SiteContextConfig,
 } from '@spartacus/core';
 import {
@@ -12,6 +14,8 @@ import {
   layoutConfig,
   mediaConfig,
 } from '@spartacus/storefront';
+import { CatalogContextService } from './services/catalog-context-service.service';
+import { CustomProductNormalizer } from './services/custom-product-normalizer';
 
 @NgModule({
   declarations: [],
@@ -38,11 +42,49 @@ import {
         fallbackLang: 'en',
       },
     }),
-    provideConfig(<FeaturesConfig>{
-      features: {
-        level: '2211.36',
+    provideConfig(<OccConfig>{
+      backend: {
+        occ: {
+          endpoints: {
+            baseSites: 'basesites?fields=baseSites(uid,urlPatterns)',
+            product: 'products/${productCode}?fields=DEFAULT',
+          },
+        },
       },
     }),
+    {
+      provide: ContextServiceMap,
+      useFactory: () => ({
+        ...serviceMapFactory(),
+        catalog: CatalogContextService,
+      }),
+    },
+    provideConfig(<SiteContextConfig>{
+      context: {
+        urlParameters: ['catalog'],
+        baseSite: ['powertools-spa'],
+        catalog: ['summer', 'winter'],
+      },
+    }),
+    provideConfig({
+      routing: {
+        routes: {
+          product: {
+            paths: [
+              'catalog/:manufacturer/:productCode/:name',
+              'catalog/:firstCategoryCode/:productCode/:name',
+              'catalog/:productCode/:name',
+            ],
+          },
+        },
+      },
+    }),
+
+    {
+      provide: PRODUCT_NORMALIZER,
+      useClass: CustomProductNormalizer,
+      multi: true,
+    },
   ],
 })
 export class SpartacusConfigurationModule {}
